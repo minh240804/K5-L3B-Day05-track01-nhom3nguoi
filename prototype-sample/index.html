@@ -131,6 +131,7 @@
   .composer .send { height: 36px; padding-inline: 10px; }
   .composer-note { color: var(--muted); font-size: 11px; padding: 0 3px 6px; }
   .composer-note.locked { display: flex; align-items: center; gap: 5px; color: var(--red); font-weight: 750; }
+  .chat-disclaimer { margin: 6px 3px 0; color: var(--muted); font-size: 11px; }
   .composer-note svg { width: 14px; height: 14px; }
   .attachment { display: block; max-width: 100%; width: 160px; max-height: 150px; object-fit: contain; border-radius: 8px; }
   .attachment + span { display: block; margin-top: 4px; }
@@ -268,6 +269,7 @@
           <button class="icon-button" type="button" id="mic-button" aria-label="Ghi âm tin nhắn"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#mic"/></svg></button>
           <button class="action primary send" type="submit" aria-label="Gửi tin nhắn"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#send-icon"/></svg>Gửi</button>
         </fieldset>
+        <p class="chat-disclaimer">Đây chỉ là trợ lý AI, không thay thế tư vấn của bác sĩ hoặc dược sĩ.</p>
       </form>
     </section>
     <aside aria-label="Lời hứa, công cụ và nguyên tắc thiết kế">
