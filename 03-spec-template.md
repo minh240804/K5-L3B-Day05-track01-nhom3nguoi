@@ -11,7 +11,7 @@
 | Vũ Quang Minh | 2A202603727 | Thiết kế cách xử lý khi AI sai (§3), phân tích các phương án phản hồi, xây dựng 4 đường đi trải nghiệm và áp dụng nguyên tắc HAX/PAIR.   |
 | Nguyễn Hoàng Gia An | 2A202603799 | Phân tích và quyết định mức tự chủ của các tool (§4), xây dựng prototype HTML mô phỏng luồng tương tác, xử lý lỗi và chuyển dược sĩ (§5). |
 | Hoàng Minh Diệp | 2A202603764 |Phân tích bài toán Healthcare, xác định lát cắt và phạm vi sản phẩm (§1); xây dựng 8 kịch bản rủi ro, lựa chọn 2 kịch bản nghiêm trọng nhất (§2). |
-| Nguyễn Đức Mạnh |2A202603731  |  |
+| Nguyễn Đức Mạnh |2A202603731  | Xây dựng tiêu chí đánh giá Pass/Fail (§6); kiểm thử prototype trên các kịch bản, tổng hợp kết quả và rà soát bài nộp (§7). |
 
 
 ## §1. Lát cắt & phạm vi
