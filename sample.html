@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0068ff">
+<title>Hỏi Dược sĩ – Pharmacity</title>
+<style>
+  :root {
+    color-scheme: light;
+    --blue: #0068ff;
+    --blue-dark: #0055d2;
+    --blue-soft: #edf5ff;
+    --ink: #15233a;
+    --muted: #52637a;
+    --line: #e1e8f1;
+    --page: #f6f8fc;
+    --chat: #e0e6ed;
+    --zalo-header: linear-gradient(105deg, #2376f3 0%, #008edb 68%, #00afd9 100%);
+    --red: #b4232c;
+    --red-soft: #fff1f1;
+    --green: #117251;
+    --green-soft: #eaf8f1;
+    --amber: #805400;
+    --amber-soft: #fff5dd;
+    font-family: "SF Pro Text", "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; color: var(--ink); background: var(--page); font-size: 15px; line-height: 1.5; }
+  button, input { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; }
+  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 3px;
+  }
+  h1, h2, h3, p { margin: 0; }
+  svg { display: block; width: 20px; height: 20px; flex: none; }
+  .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .wrap { width: min(100% - 64px, 1120px); margin-inline: auto; }
+
+  .top { background: #fff; border-bottom: 1px solid var(--line); }
+  .top-inner { min-height: 63px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 750; letter-spacing: -.025em; }
+  .avatar { display: grid; flex: none; place-items: center; background: var(--blue); color: white; border-radius: 13px; width: 43px; height: 43px; }
+  .avatar svg { width: 24px; height: 24px; }
+  .brand .avatar { width: 33px; height: 33px; border-radius: 10px; }
+  .brand .avatar svg { width: 20px; height: 20px; }
+  .demo-label { color: var(--muted); font-size: 12px; font-weight: 650; }
+
+  .intro { margin-block: 28px 18px; }
+  h1 { font-size: clamp(29px, 4.2vw, 44px); letter-spacing: -.045em; line-height: 1.12; }
+  .intro p { color: var(--muted); margin-top: 8px; }
+  .controls { margin-bottom: 20px; display: grid; gap: 10px; }
+  .control-row { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; }
+  .control-row > b { min-width: 103px; font-size: 13px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 6px; }
+  .choice { min-height: 37px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 9px; background: white; color: var(--muted); font-size: 13px; font-weight: 650; }
+  .choice:hover { border-color: #a5c6f6; }
+  .choice[aria-pressed="true"] { background: var(--blue-soft); color: var(--blue-dark); border-color: #bbd8ff; }
+  .level[aria-pressed="true"] { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .level-number { margin-right: 5px; font-variant-numeric: tabular-nums; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 485px) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .phone { min-width: 0; overflow: hidden; border-radius: 23px; background: #fff; border: 1px solid #d6e0ed; box-shadow: 0 14px 36px #23477014; }
+  .phone-header { display: flex; gap: 9px; align-items: center; padding: 11px 13px; color: #fff; background: var(--zalo-header); border-bottom: 1px solid #1781d0; }
+  .phone-header .avatar { background: #ffffff26; }
+  .phone-header .icon-button { color: #fff; }
+  .phone-header .icon-button:hover { background: #ffffff26; }
+  .phone-header .icon-button:focus-visible { outline-color: #fff; }
+  .phone-heading { flex: 1; min-width: 0; }
+  .phone-heading h2 { font-size: 14px; line-height: 1.25; letter-spacing: -.015em; }
+  .oa-status { color: #fff; font-size: 11px; margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+  .verified { display: inline-grid; flex: none; place-items: center; width: 13px; height: 13px; border-radius: 50%; color: #fff; background: var(--blue); vertical-align: middle; }
+  .verified svg { width: 10px; height: 10px; }
+  .icon-button { display: inline-grid; place-items: center; padding: 0; border: 0; border-radius: 9px; width: 34px; height: 36px; flex: none; color: var(--blue-dark); background: transparent; }
+  .icon-button:hover { background: var(--blue-soft); }
+  .chat { background: var(--chat); height: clamp(405px, calc(100svh - 430px), 630px); padding: 14px; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-color: #bac7d8 transparent; scrollbar-width: thin; }
+  .messages { display: flex; flex-direction: column; gap: 10px; }
+  .date { align-self: center; color: #fff; background: #637184; border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 650; }
+  .outgoing { align-self: end; max-width: 85%; }
+  .message { padding: 8px 11px; font-size: 13.5px; overflow-wrap: anywhere; }
+  .outgoing .message { background: #d3effc; color: #182631; border: 1px solid #b8d1dd; border-radius: 14px; }
+  .message-meta { margin-top: 3px; color: var(--muted); font-size: 10px; }
+  .outgoing .message-meta { text-align: right; }
+  .incoming { display: grid; grid-template-columns: 29px minmax(0, 1fr); gap: 7px; max-width: 96%; }
+  .incoming .avatar { width: 29px; height: 29px; border-radius: 9px; }
+  .incoming .avatar svg { width: 17px; height: 17px; }
+  .incoming .message { background: #fff; border: 1px solid #cfd6de; border-radius: 14px; }
+  .sender { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: 3px; color: #19447e; font-size: 11px; font-weight: 750; }
+  .sender small { font-size: 10px; color: var(--muted); font-weight: 550; }
+  .evidence { margin-top: 8px; color: var(--muted); font-size: 12px; padding-left: 8px; border-left: 2px solid #c0d7f6; }
+
+  .card { margin-top: 9px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+  .product-top { display: flex; align-items: center; gap: 10px; padding: 10px; }
+  .product-art { flex: none; width: 62px; height: 61px; display: grid; place-items: center; border-radius: 9px; background: #edf7ff; }
+  .bottle { position: relative; width: 25px; height: 38px; margin-top: 6px; border: 1px solid #a2c6f3; border-radius: 7px 7px 5px 5px; background: linear-gradient(#fff 25%, #d1e9ff 25% 75%, #fff 75%); box-shadow: 0 3px 6px #1d63a62b; }
+  .bottle::before { content: ""; position: absolute; left: 5px; right: 5px; top: -7px; height: 8px; background: #4c8ee8; border-radius: 3px 3px 0 0; }
+  .bottle::after { content: "NaCl"; position: absolute; inset: 12px 0 auto; text-align: center; font-size: 7px; font-weight: 800; color: #164683; }
+  .product-top strong, .product-top small { display: block; }
+  .product-top small { color: var(--muted); font-size: 11px; }
+  .product-type { color: var(--blue-dark); font-size: 10px; font-weight: 750; }
+  .card-link { width: 100%; border: 0; border-top: 1px solid var(--line); background: #f7fbff; padding: 8px; font-size: 12px; font-weight: 750; color: var(--blue-dark); }
+  .card-link:hover { background: var(--blue-soft); }
+  .card-link:disabled { background: #f0f2f5; color: var(--muted); }
+  .withdrawn .product-top { background: #f8f9fb; }
+  .withdrawn .product-art { filter: grayscale(1); opacity: .7; }
+  .notice { border: 1px solid #d4e6fc; border-radius: 10px; padding: 9px 10px; background: var(--blue-soft); margin-top: 8px; font-size: 12px; }
+  .notice.amber { color: var(--amber); background: var(--amber-soft); border-color: #efdeae; }
+  .notice.green { color: var(--green); background: var(--green-soft); border-color: #c8eadc; }
+  .notice strong { display: block; }
+  .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .action { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 34px; padding: 6px 9px; border: 1px solid #b8d5ff; border-radius: 8px; background: #fff; color: var(--blue-dark); font-size: 12px; font-weight: 750; text-decoration: none; }
+  .action:hover { background: var(--blue-soft); }
+  .action.primary { background: var(--blue); color: white; border-color: var(--blue); }
+  .action.primary:hover { background: var(--blue-dark); }
+  .action svg { width: 15px; height: 15px; }
+  .emergency { margin-left: 36px; padding: 12px; border: 1px solid #f0b8bc; border-radius: 12px; color: #792027; background: var(--red-soft); font-size: 13px; }
+  .emergency h3 { display: flex; align-items: center; gap: 6px; color: var(--red); font-size: 14px; margin-bottom: 5px; }
+  .emergency .action { margin-top: 8px; color: #fff; background: var(--red); border-color: var(--red); }
+  .emergency .action:hover { background: #961c24; }
+  .timer { font-variant-numeric: tabular-nums; }
+
+  .composer { background: white; border-top: 1px solid var(--line); padding: 9px 11px; }
+  .composer fieldset { display: flex; align-items: center; gap: 4px; min-width: 0; border: 0; padding: 0; margin: 0; }
+  .composer fieldset:disabled { opacity: .5; }
+  .entry { flex: 1; min-width: 0; height: 37px; border-radius: 9px; border: 1px solid transparent; background: #f0f3f8; color: var(--ink); padding-inline: 9px; font-size: 13px; }
+  .entry::placeholder { color: #53647b; }
+  .composer .send { height: 36px; padding-inline: 10px; }
+  .composer-note { color: var(--muted); font-size: 11px; padding: 0 3px 6px; }
+  .composer-note.locked { display: flex; align-items: center; gap: 5px; color: var(--red); font-weight: 750; }
+  .composer-note svg { width: 14px; height: 14px; }
+  .attachment { display: block; max-width: 100%; width: 160px; max-height: 150px; object-fit: contain; border-radius: 8px; }
+  .attachment + span { display: block; margin-top: 4px; }
+
+  aside { display: grid; gap: 12px; min-width: 0; }
+  .panel { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 13px 15px; }
+  .panel h2 { display: flex; align-items: center; gap: 7px; font-size: 15px; letter-spacing: -.01em; }
+  .panel h2 svg { color: var(--blue); width: 17px; height: 17px; }
+  .promise { margin-top: 7px; color: #22456d; background: var(--blue-soft); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+  .tool-list { margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 7px; vertical-align: top; }
+  th { color: var(--muted); font-size: 11px; }
+  th:first-child { width: 36%; }
+  th:nth-child(2) { width: 25%; }
+  tbody tr { border-top: 1px solid var(--line); }
+  tbody tr.selected-tool { background: #f0f6ff; }
+  code { overflow-wrap: anywhere; color: #204974; font-size: 11px; }
+  .pill { display: inline-block; border-radius: 999px; padding: 2px 7px; font-weight: 700; font-size: 10px; color: var(--blue-dark); background: var(--blue-soft); }
+  .pill.ask { background: var(--amber-soft); color: var(--amber); }
+  .pill.auto { background: var(--green-soft); color: var(--green); }
+  .pill.block { background: var(--red-soft); color: var(--red); }
+  .annotation-heading { display: flex; justify-content: space-between; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .annotation-heading label { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: 11px; cursor: pointer; }
+  input[type="checkbox"] { accent-color: var(--blue); }
+  .annotations { list-style: none; padding: 0; margin: 5px 0 0; font-size: 12px; }
+  .annotations li { display: grid; grid-template-columns: 17px 1fr; gap: 6px; padding: 5px 0; }
+  .annotations strong { color: #273e5c; }
+  .annotations p { color: var(--muted); }
+  .marker { display: inline-grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: #e2efff; color: #004cae; font-size: 10px; font-weight: 800; vertical-align: 1px; }
+  .hide-markers .marker { visibility: hidden; }
+  .foot { color: var(--muted); padding-block: 15px 20px; font-size: 11px; }
+  dialog { max-width: min(410px, calc(100vw - 28px)); border: 1px solid var(--line); border-radius: 15px; padding: 18px; color: var(--ink); box-shadow: 0 18px 45px #182b4b45; }
+  dialog::backdrop { background: #13284a70; }
+  dialog h2 { font-size: 17px; }
+  dialog p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  dialog .actions { margin-top: 14px; }
+
+  @media (max-width: 850px) {
+    .wrap { width: min(100% - 36px, 650px); }
+    .layout { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .wrap { width: calc(100% - 24px); }
+    .top-inner { min-height: 52px; }
+    .intro { margin-block: 18px 13px; }
+    .intro p { font-size: 13px; }
+    .controls { margin-bottom: 14px; gap: 8px; }
+    .control-row { gap: 4px; }
+    .control-row > b { width: 100%; }
+    .choice { min-height: 36px; padding-inline: 8px; font-size: 11px; }
+    .level-number { margin-right: 3px; }
+    .layout { gap: 13px; }
+    .phone { border-radius: 16px; }
+    .phone-header { padding: 8px 6px; gap: 5px; }
+    .phone-header .avatar { width: 34px; height: 34px; border-radius: 10px; }
+    .phone-heading h2 { font-size: 12px; }
+    .icon-button { width: 31px; }
+    .chat { height: clamp(370px, 60svh, 620px); padding: 11px 8px; }
+    .composer { padding-inline: 6px; }
+    th, td { padding-inline: 3px; }
+    .panel { padding-inline: 10px; }
+  }
+</style>
+</head>
+<body>
+<svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <symbol id="health" viewBox="0 0 24 24"><path fill="currentColor" d="M10 3h4a1 1 0 0 1 1 1v5h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-5v5a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-5H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h5V4a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m6 12 4 4 8-8"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="phone-icon" viewBox="0 0 24 24"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3a1 1 0 0 0-.8-1l-4.3-1a1 1 0 0 0-1 .3l-1.5 1.4a13 13 0 0 1-6.1-6.1l1.4-1.5a1 1 0 0 0 .3-1l-1-4.3A1 1 0 0 0 7 3Z"/></symbol>
+    <symbol id="menu-icon" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3.5"/></symbol>
+    <symbol id="image-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m4 17 5-5 4 4 3-3 4 4M15 9h.01" /></symbol>
+    <symbol id="mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3m-3 0h6"/></symbol>
+    <symbol id="send-icon" viewBox="0 0 24 24"><path d="M21 3 9.5 14.5M21 3l-5 18-6.5-6.5L3 8l18-5Z"/></symbol>
+    <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+    <symbol id="shield" viewBox="0 0 24 24"><path d="M12 22s8-3.8 8-10V5l-8-3-8 3v7c0 6.2 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="sliders" viewBox="0 0 24 24"><path d="M4 6h5m4 0h7M4 12h10m4 0h2M4 18h3m4 0h9M9 4v4m5 2v4m-7 2v4"/></symbol>
+    <symbol id="note" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8m-8 4h8m-8 4h5"/></symbol>
+    <symbol id="warning" viewBox="0 0 24 24"><path d="M10.3 4.5 2.5 18a1.8 1.8 0 0 0 1.6 2.7h15.8a1.8 1.8 0 0 0 1.6-2.7L13.7 4.5a2 2 0 0 0-3.4 0ZM12 9v4m0 4h.01"/></symbol>
+  </defs>
+</svg>
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand"><span class="avatar" aria-hidden="true"><svg><use href="#health"/></svg></span>Pharmacity</div>
+    <span class="demo-label">Prototype · Track 1 Y tế</span>
+  </div>
+</header>
+<main class="wrap">
+  <div class="intro">
+    <h1>Hỏi Dược sĩ</h1>
+    <p>Mô phỏng kênh tư vấn sức khỏe trên Zalo Official Account.</p>
+  </div>
+  <section class="controls" aria-label="Điều khiển bản demo">
+    <div class="control-row" id="levels">
+      <b id="level-label">Mức tự chủ</b>
+      <div class="choices" role="group" aria-labelledby="level-label">
+        <button class="choice level" type="button" data-level="1" aria-pressed="false"><span class="level-number">1</span>Chỉ gợi ý</button>
+        <button class="choice level" type="button" data-level="2" aria-pressed="true"><span class="level-number">2</span>Cần xác nhận (HITL)</button>
+        <button class="choice level" type="button" data-level="3" aria-pressed="false"><span class="level-number">3</span>Tự làm + hoàn tác</button>
+      </div>
+    </div>
+    <div class="control-row" id="scenarios">
+      <b id="scenario-label">Kịch bản</b>
+      <div class="choices" role="group" aria-labelledby="scenario-label">
+        <button class="choice" type="button" data-case="otc" aria-pressed="true">Tra cứu OTC</button>
+        <button class="choice" type="button" data-case="urgent" aria-pressed="false">Tức ngực, khó thở</button>
+        <button class="choice" type="button" data-case="pregnancy" aria-pressed="false">Thai phụ</button>
+        <button class="choice" type="button" data-case="child" aria-pressed="false">Trẻ bị sốt</button>
+      </div>
+    </div>
+  </section>
+  <div class="layout">
+    <section class="phone" aria-labelledby="oa-title">
+      <header class="phone-header">
+        <button class="icon-button" type="button" id="back-button" aria-label="Quay lại danh sách kịch bản"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#back"/></svg></button>
+        <span class="avatar" aria-hidden="true"><svg><use href="#health"/></svg></span>
+        <div class="phone-heading">
+          <h2 id="oa-title">Pharmacity - Tư vấn sức khỏe</h2>
+          <p class="oa-status"><span class="verified" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><use href="#check"/></svg></span> Official Account</p>
+        </div>
+        <button class="icon-button" type="button" id="call-button" aria-label="Gọi Pharmacity"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#phone-icon"/></svg></button>
+        <button class="icon-button" type="button" id="menu-button" aria-label="Menu cuộc trò chuyện"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><use href="#menu-icon"/></svg></button>
+      </header>
+      <div class="chat" id="chat" tabindex="0" aria-label="Lịch sử tin nhắn">
+        <div class="messages" id="messages" role="log" aria-label="Cuộc trò chuyện" aria-live="polite"></div>
+      </div>
+      <form class="composer" id="composer">
+        <p class="composer-note" id="composer-note" role="status" hidden></p>
+        <fieldset id="composer-controls" aria-label="Soạn tin nhắn">
+          <input class="entry" id="entry" type="text" aria-label="Tin nhắn" placeholder="Nhập tin nhắn..." maxlength="500" autocomplete="off">
+          <input id="photo" type="file" accept="image/*" aria-label="Chọn ảnh bao bì thuốc" hidden>
+          <button class="icon-button" type="button" id="photo-button" aria-label="Đính kèm ảnh bao bì thuốc"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#image-icon"/></svg></button>
+          <button class="icon-button" type="button" id="mic-button" aria-label="Ghi âm tin nhắn"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#mic"/></svg></button>
+          <button class="action primary send" type="submit" aria-label="Gửi tin nhắn"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#send-icon"/></svg>Gửi</button>
+        </fieldset>
+      </form>
+    </section>
+    <aside aria-label="Lời hứa, công cụ và nguyên tắc thiết kế">
+      <section class="panel">
+        <h2><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#shield"/></svg>Lời hứa với khách</h2>
+        <p class="promise" id="promise" aria-live="polite"></p>
+      </section>
+      <section class="panel">
+        <h2><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#sliders"/></svg>Mức tự chủ của 5 công cụ</h2>
+        <div class="tool-list">
+          <table aria-label="Quyền hạn của công cụ">
+            <thead><tr><th scope="col">Công cụ</th><th scope="col">Quyền</th><th scope="col">Điều kiện</th></tr></thead>
+            <tbody id="tools"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="annotation-heading">
+          <h2><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#note"/></svg>Chú thích HAX / PAIR</h2>
+          <label><input type="checkbox" id="annotation-toggle" checked>Hiện số trong chat</label>
+        </div>
+        <ol class="annotations" id="annotations"></ol>
+      </section>
+    </aside>
+  </div>
+  <p class="foot">Dữ liệu mô phỏng · Tin nhắn và ảnh chỉ xuất hiện trong phiên mở trang này.</p>
+</main>
+<dialog id="dialog" aria-labelledby="dialog-title">
+  <h2 id="dialog-title"></h2>
+  <p id="dialog-copy"></p>
+  <div class="actions" id="dialog-actions"></div>
+  <form method="dialog" class="actions"><button class="action" value="close">Đóng</button></form>
+</dialog>
+<script>
+  const $ = (selector) => document.querySelector(selector);
+  const icon = (id) => `<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#${id}"/></svg>`;
+  const avatar = `<span class="avatar" aria-hidden="true"><svg><use href="#health"/></svg></span>`;
+  const verified = `<span class="verified" role="img" aria-label="Official Account đã xác minh">${icon('check')}</span>`;
+  const marker = (number) => `<span class="marker" aria-label="Chú thích ${number}">${number}</span>`;
+  const action = (name, label, primary = false) =>
+    `<button type="button" class="action${primary ? ' primary' : ''}" data-action="${name}">${label}</button>`;
+  const handoffButton = () => action('handoff', marker(5) + ' Gặp dược sĩ');
+  const escapeHtml = (text) => text.replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+
+  const config = {
+    1: { promise: 'Mình giúp bạn kiểm tra thông tin. Bạn chủ động mở thẻ sản phẩm minh họa.', permission: 'Chỉ gợi ý', style: '', rule: 'Khách tự mở mục tra cứu sản phẩm.' },
+    2: { promise: 'Mình chuẩn bị phiếu OTC. Dược sĩ kiểm tra phiếu và xác nhận trước khi thẻ xuất hiện.', permission: 'Dược sĩ duyệt', style: 'ask', rule: 'Dược sĩ kiểm tra triệu chứng, người dùng và chống chỉ định.' },
+    3: { promise: 'Mình tự mở thẻ tra cứu OTC sau sàng lọc. Bạn có 60 giây để thu hồi thẻ khỏi bản demo.', permission: 'Tự làm + hoàn tác', style: 'auto', rule: 'Tự hiển thị thẻ tra cứu sau sàng lọc. Có 60 giây để thu hồi.' }
+  };
+  const notes = {
+    1: ['HAX G2 · Làm rõ năng lực', 'Nêu thông tin AI còn thiếu hoặc phạm vi có thể hỗ trợ.'],
+    2: ['HAX G11 · Giải thích căn cứ', 'Bong bóng giải thích dữ kiện dẫn đến quyết định.'],
+    3: ['HAX G10 · Hỏi lại khi thiếu dữ kiện', 'Câu sàng lọc làm rõ người sử dụng và ngữ cảnh.'],
+    4: ['HAX G8/G9 · Kiểm soát thao tác', 'Dược sĩ duyệt phiếu hoặc khách thu hồi thẻ trong thời hạn.'],
+    5: ['PAIR · Chuyển giao', 'Chuyển ngữ cảnh để dược sĩ tiếp nhận hoặc hướng người dùng đến cấp cứu.'],
+    6: ['HAX G9 · Sửa dễ dàng', 'Sửa thông tin trên phiếu hoặc vô hiệu hóa thẻ đã thu hồi.']
+  };
+
+  const messages = $('#messages');
+  const chat = $('#chat');
+  const entry = $('#entry');
+  const dialog = $('#dialog');
+  const photoUrls = [];
+  let level = 2;
+  let scenario = 'otc';
+  let phase = 'initial';
+  let deadline = 0;
+  let timer = 0;
+  let screening = 'Người lớn, đang hỏi tình trạng còn hàng';
+  let extraMessages = [];
+
+  const outgoing = (body, time = '09:41') =>
+    `<div class="outgoing"><div class="message">${body}</div><div class="message-meta">${time}</div></div>`;
+  const incoming = (body, sender = 'Trợ lý AI') =>
+    `<div class="incoming">${avatar}<div class="message"><div class="sender">Pharmacity - Hỏi Dược Sĩ ${verified}<small>· ${sender}</small></div>${body}</div></div>`;
+  const notice = (title, body, tone = '') =>
+    `<div class="notice ${tone}"><strong>${title}</strong>${body}</div>`;
+  const evidence = (body) => `<div class="evidence">${marker(2)} ${body}</div>`;
+  const timerLabel = () => {
+    const seconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    return `0${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+  };
+
+  function product(withdrawn = false) {
+    return `<div class="card${withdrawn ? ' withdrawn' : ''}">
+      <div class="product-top">
+        <div class="product-art" aria-hidden="true"><span class="bottle"></span></div>
+        <div><span class="product-type">TRA CỨU OTC</span><strong>Nước muối sinh lý 0,9%</strong><small>${withdrawn ? 'Thẻ đã được thu hồi' : 'Dữ liệu minh họa · Chưa xác minh tồn kho'}</small></div>
+      </div>
+      <button class="card-link" type="button" data-action="product-info" ${withdrawn ? 'disabled' : ''}>${withdrawn ? 'Đã vô hiệu hóa' : 'Xem thông tin sản phẩm'}</button>
+    </div>`;
+  }
+
+  function otcConversation() {
+    const needsCorrection = screening === 'Chưa xác định người dùng và nhu cầu';
+    let history = outgoing('Pharmacity gần mình còn nước muối sinh lý không? Tối nay mình qua lấy.')
+      + incoming(`${marker(3)} Bạn hỏi để dùng cho ai và muốn tra cứu tại khu vực nào?`)
+      + outgoing(needsCorrection ? 'Mình muốn sửa lại đối tượng sử dụng và khu vực.' : 'Cho người lớn ạ, mình ở Quận 3.', '09:42');
+    let result = `${marker(1)} Mình chưa có dữ liệu tồn kho tại Quận 3.`
+      + evidence('Khách hỏi tình trạng còn hàng cho người lớn. Cần kiểm tra tồn kho tại cửa hàng.');
+    if (phase === 'handoff') {
+      result = notice(marker(5) + ' Đang chờ dược sĩ',
+        needsCorrection ? 'Dược sĩ sẽ thấy phiếu còn thiếu đối tượng sử dụng và khu vực.'
+          : 'Phiếu tra cứu và nội dung hội thoại đã vào hàng đợi mô phỏng.', 'green');
+    } else if (needsCorrection) {
+      result = notice('Cần bổ sung thông tin', 'Phiếu đã được đặt lại. Chọn thông tin sàng lọc mẫu để tiếp tục.', 'amber')
+        + `<div class="actions">${action('restore-screening', 'Dùng thông tin mẫu', true)} ${handoffButton()}</div>`;
+    } else if (phase === 'withdrawn') {
+      result += notice(marker(6) + ' Đã thu hồi thẻ', 'Thao tác xem sản phẩm đã được vô hiệu hóa.', 'green') + product(true);
+    } else if (level === 1) {
+      result += phase === 'shown' ? product() : `<div class="actions">${action('show-product', 'Mở mục tra cứu', true)}${handoffButton()}</div>`;
+    } else if (level === 2) {
+      if (phase === 'shown') {
+        result += notice(marker(4) + ' Dược sĩ đã duyệt', 'Phiếu tra cứu OTC đã được xác nhận trong demo.', 'green') + product();
+      } else if (phase === 'expired') {
+        result += notice('Phiếu đã hết hạn', 'Thẻ sản phẩm vẫn đang ẩn.', 'amber')
+          + `<div class="actions">${action('retry', 'Tạo lại phiếu', true)}${handoffButton()}</div>`;
+      } else {
+        result += notice(marker(4) + ' Chờ dược sĩ xác nhận', `Người lớn · Quận 3 · hỏi tồn kho. Phiếu hết hạn sau <b class="timer">${timerLabel()}</b>.`, 'amber')
+          + `<div class="actions">${action('approve', 'Duyệt (vai dược sĩ)', true)}${action('correct', marker(6) + ' Sửa phiếu')}${handoffButton()}</div>`;
+      }
+    } else {
+      result += product();
+      if (phase === 'expired') {
+        result += notice(marker(4) + ' Đã hết thời gian hoàn tác', 'Thẻ tra cứu vẫn hiển thị.');
+      } else {
+        result += notice(marker(4) + ' Đã tự mở thẻ tra cứu', `Bạn có thể thu hồi trong <b class="timer">${timerLabel()}</b>.`)
+          + `<div class="actions">${action('undo', 'Hoàn tác')}${handoffButton()}</div>`;
+      }
+    }
+    return history + incoming(result);
+  }
+
+  function urgentConversation() {
+    return outgoing('Bố mình 68 tuổi, đang tức ngực và khó thở. Mình tưởng bố đau dạ dày. Có thuốc gì không?')
+      + incoming(`${marker(1)} Mình đã dừng luồng tư vấn thuốc cho bố bạn.`
+        + evidence('Bạn báo bố 68 tuổi, đang tức ngực kèm khó thở.'))
+      + `<section class="emergency" aria-label="Cảnh báo cấp cứu">
+          <h3>${icon('warning')} <span class="marker" aria-label="Chú thích 5">5</span> Có dấu hiệu cần cấp cứu</h3>
+          <p>Gọi <strong>115 ngay</strong>. Đừng chờ phản hồi từ dược sĩ hay tự dùng thuốc theo phỏng đoán.</p>
+          <a class="action" href="tel:115">${icon('phone-icon')} Gọi cấp cứu 115</a>
+        </section>`;
+  }
+
+  function pregnancyConversation() {
+    return outgoing('Em đang sổ mũi, dùng thuốc cảm được không?')
+      + incoming(`${marker(3)} Bạn có đang mang thai hoặc cho con bú không?`)
+      + outgoing('Em đang mang thai 3 tháng đầu. Có loại nào an toàn tuyệt đối không?', '09:42')
+      + incoming(`${marker(1)} Mình đã dừng gợi ý thuốc cảm để dược sĩ xem xét trường hợp của bạn.`
+        + evidence('Bạn đang mang thai 3 tháng đầu.')
+        + notice(marker(6) + ' Đã chặn thẻ gợi ý thuốc', 'Thẻ và thao tác mua đã bị vô hiệu hóa.', 'amber')
+        + `<div class="card"><button class="card-link" type="button" disabled>Xem hoặc mua thuốc cảm · Đã khóa</button></div>`
+        + notice(marker(5) + ' Đã chuyển dược sĩ · Ưu tiên thai kỳ', 'Dược sĩ sẽ thấy các lượt trao đổi trước. Bạn có thể bổ sung thông tin trong khi chờ.', 'green'));
+  }
+
+  function childConversation() {
+    return outgoing('Bé nhà mình sốt từ tối, cho loại nào? Mình đang vội.')
+      + incoming(`${marker(3)} Bé bao nhiêu tuổi, đo được bao nhiêu độ và đã dùng thuốc gì chưa?`)
+      + outgoing('Bé 2 tuổi, đo được 38°C, chưa dùng thuốc. Uống paracetamol loại nào ạ?', '09:42')
+      + incoming(`${marker(1)} Mình cần chuyển dược sĩ xem thông tin của bé trước khi tư vấn về thuốc.`
+        + evidence('Bé 2 tuổi, sốt từ tối, đo được 38°C và chưa dùng thuốc.')
+        + notice(marker(5) + ' Đã chuyển dược sĩ', 'Nội dung sàng lọc đi kèm phiếu. Bạn có thể nhắn thêm thông tin trong lúc chờ.', 'green'));
+  }
+
+  function renderConversation(scrollToEnd = false) {
+    const previousScroll = chat.scrollTop;
+    const content = { otc: otcConversation, urgent: urgentConversation, pregnancy: pregnancyConversation, child: childConversation }[scenario]();
+    messages.innerHTML = '<div class="date">Hôm nay</div>' + content + extraMessages.join('');
+    const locked = scenario === 'urgent';
+    $('#composer-controls').disabled = locked;
+    const composerNote = $('#composer-note');
+    composerNote.hidden = !locked;
+    composerNote.classList.toggle('locked', locked);
+    composerNote.innerHTML = locked ? icon('lock') + ' Chat đã khóa để ưu tiên cấp cứu.' : '';
+    $('#call-button').setAttribute('aria-label', locked ? 'Mở tùy chọn gọi cấp cứu' : 'Gọi Pharmacity');
+    chat.scrollTop = scrollToEnd ? chat.scrollHeight : previousScroll;
+  }
+
+  function renderPanels() {
+    const current = config[level];
+    $('#promise').textContent = scenario === 'otc'
+      ? current.promise
+      : scenario === 'urgent'
+        ? 'Khi có dấu hiệu cấp cứu, mình dừng tư vấn thuốc và hiện hướng dẫn gọi 115 ngay ở mọi mức.'
+        : 'Với ca cần chuyên môn, mình chuyển thông tin cho dược sĩ và tạm dừng gợi ý thuốc ở mọi mức.';
+    const rows = [
+      scenario === 'otc'
+        ? ['goi_y_san_pham', current.permission, current.style, current.rule]
+        : ['goi_y_san_pham', 'Chặn theo ca', 'block', 'Dừng hiển thị thẻ gợi ý thuốc.'],
+      ['khuyen_di_kham', 'Tự làm', 'auto', 'Hiện cảnh báo ngay khi có dấu hiệu cấp cứu.'],
+      ['chuyen_duoc_si', 'Tự làm', 'auto', 'Chuyển ngữ cảnh khi cần chuyên môn.'],
+      ['luu_ghi_chu_suc_khoe', 'Khách duyệt', 'ask', 'Chỉ lưu khi khách đồng ý riêng.'],
+      ['ban_thuoc_ke_don', 'Cấm', 'block', 'Chuyển sang quy trình thẩm định đơn.']
+    ];
+    $('#tools').innerHTML = rows.map(([name, permission, style, rule], index) =>
+      `<tr${index === 0 ? ' class="selected-tool"' : ''}><td><code>${name}</code></td><td><span class="pill ${style}">${permission}</span></td><td>${rule}</td></tr>`).join('');
+    const visibleNotes = {
+      otc: level === 1 ? [1, 2, 3, 5] : [1, 2, 3, 4, 5, 6],
+      urgent: [1, 2, 5],
+      pregnancy: [1, 2, 3, 5, 6],
+      child: [1, 2, 3, 5]
+    }[scenario];
+    $('#annotations').innerHTML = visibleNotes.map((number) =>
+      `<li>${marker(number)}<div><strong>${notes[number][0]}</strong><p>${notes[number][1]}</p></div></li>`).join('');
+  }
+
+  function stopTimer() {
+    clearInterval(timer);
+    deadline = 0;
+  }
+
+  function refreshTimer() {
+    if (!deadline) return;
+    if (Date.now() >= deadline) {
+      if (dialog.open && $('[data-action="confirm-approval"]')) dialog.close();
+      stopTimer();
+      phase = 'expired';
+      renderConversation();
+      return;
+    }
+    const counter = $('.timer');
+    if (counter) counter.textContent = timerLabel();
+  }
+
+  function startTimer() {
+    stopTimer();
+    if (scenario !== 'otc' || level === 1) return;
+    deadline = Date.now() + (level === 2 ? 120_000 : 60_000);
+    timer = setInterval(refreshTimer, 250);
+  }
+
+  function resetConversation() {
+    for (const url of photoUrls.splice(0)) URL.revokeObjectURL(url);
+    phase = 'initial';
+    screening = 'Người lớn, đang hỏi tình trạng còn hàng';
+    extraMessages = [];
+    entry.value = '';
+    $('#photo').value = '';
+    $('#levels').hidden = scenario !== 'otc';
+    for (const button of document.querySelectorAll('[data-level]')) {
+      button.setAttribute('aria-pressed', String(Number(button.dataset.level) === level));
+    }
+    for (const button of document.querySelectorAll('[data-case]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.case === scenario));
+    }
+    startTimer();
+    renderPanels();
+    renderConversation();
+    chat.scrollTop = scenario === 'urgent' ? chat.scrollHeight : 0;
+  }
+
+  function openDialog(title, copy, actions = '') {
+    $('#dialog-title').textContent = title;
+    $('#dialog-copy').textContent = copy;
+    $('#dialog-actions').innerHTML = actions;
+    if (!dialog.open) dialog.showModal();
+  }
+
+  function runAction(name) {
+    if (name === 'restart') {
+      dialog.close();
+      resetConversation();
+      return;
+    }
+    if (scenario !== 'otc') return;
+    if (deadline && Date.now() >= deadline) {
+      refreshTimer();
+      return;
+    }
+
+    if (name === 'product-info') {
+      openDialog('Nước muối sinh lý 0,9%', 'Thẻ minh họa thông tin sản phẩm OTC. Tình trạng còn hàng và giá tại cửa hàng chưa được xác minh.');
+      return;
+    }
+    if (name === 'approve') {
+      if (level !== 2 || phase !== 'initial' || !deadline) return;
+      openDialog('Dược sĩ duyệt phiếu OTC', 'Phiếu mô phỏng ghi nhận người lớn ở Quận 3 muốn tra cứu tồn kho nước muối sinh lý. Xác nhận sẽ hiện thẻ tra cứu cho khách.',
+        action('confirm-approval', 'Xác nhận hiển thị', true));
+      return;
+    }
+
+    switch (name) {
+      case 'show-product':
+        if (level !== 1 || phase !== 'initial') return;
+        phase = 'shown';
+        break;
+      case 'confirm-approval':
+        if (level !== 2 || phase !== 'initial' || !deadline) return;
+        stopTimer();
+        phase = 'shown';
+        dialog.close();
+        break;
+      case 'undo':
+        if (level !== 3 || phase !== 'initial' || !deadline) return;
+        stopTimer();
+        phase = 'withdrawn';
+        break;
+      case 'correct':
+        if (level !== 2 || phase !== 'initial') return;
+        stopTimer();
+        screening = 'Chưa xác định người dùng và nhu cầu';
+        phase = 'editing';
+        break;
+      case 'restore-screening':
+      case 'retry':
+        screening = 'Người lớn, đang hỏi tình trạng còn hàng';
+        phase = 'initial';
+        startTimer();
+        break;
+      case 'handoff':
+        stopTimer();
+        phase = 'handoff';
+        break;
+      default:
+        return;
+    }
+    renderConversation(true);
+  }
+
+  $('#levels').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-level]');
+    if (!button || Number(button.dataset.level) === level) return;
+    level = Number(button.dataset.level);
+    resetConversation();
+  });
+  $('#scenarios').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-case]');
+    if (!button || button.dataset.case === scenario) return;
+    scenario = button.dataset.case;
+    resetConversation();
+  });
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-action]');
+    if (button && !button.disabled) runAction(button.dataset.action);
+  });
+  $('#annotation-toggle').addEventListener('change', (event) => {
+    chat.classList.toggle('hide-markers', !event.target.checked);
+  });
+  $('#back-button').addEventListener('click', () => {
+    $('#scenarios [aria-pressed="true"]').focus();
+  });
+  $('#menu-button').addEventListener('click', () => {
+    openDialog('Cuộc trò chuyện', 'Bắt đầu lại kịch bản để thử lại các thao tác trong phiên demo.',
+      action('restart', 'Bắt đầu lại', true));
+  });
+  $('#call-button').addEventListener('click', () => {
+    if (scenario === 'urgent') {
+      openDialog('Gọi cấp cứu', 'Gọi 115 ngay khi có dấu hiệu cấp cứu.',
+        `<a class="action primary" href="tel:115">${icon('phone-icon')} Gọi 115</a>`);
+    } else {
+      openDialog('Gọi Pharmacity', 'Tính năng gọi Pharmacity được mô phỏng trong prototype.');
+    }
+  });
+  $('#mic-button').addEventListener('click', () => {
+    openDialog('Ghi âm tin nhắn', 'Tính năng ghi âm được mô phỏng. Bạn có thể nhập nội dung bằng bàn phím.');
+  });
+  $('#composer').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const text = entry.value.trim();
+    if (scenario === 'urgent' || !text) return;
+    extraMessages.push(outgoing(escapeHtml(text), 'Vừa xong'));
+    entry.value = '';
+    renderConversation(true);
+  });
+  $('#photo-button').addEventListener('click', () => $('#photo').click());
+  $('#photo').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    event.target.value = '';
+    if (scenario === 'urgent' || !file) return;
+    if (!file.type.startsWith('image/')) {
+      openDialog('Chọn ảnh bao bì thuốc', 'Hãy chọn một tệp ảnh để hiển thị trong cuộc trò chuyện.');
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    photoUrls.push(url);
+    extraMessages.push(outgoing(`<img class="attachment" src="${url}" alt="Ảnh bao bì thuốc"><span>${escapeHtml(file.name)}</span>`, 'Vừa xong'));
+    renderConversation(true);
+  });
+  document.addEventListener('visibilitychange', refreshTimer);
+  resetConversation();
+</script>
+</body>
+</html>
