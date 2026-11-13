@@ -1,7 +1,3 @@
-> **Một quyết định = bốn ý:** đã cân nhắc phương án nào · chọn phương án nào · vì sao · loại các phương án kia vì sao. Bằng chứng = lập luận trỏ về một chỗ cụ thể: tool nào, dòng dữ liệu nào của track, điều gì trong mục "Sản phẩm thật hôm nay", chỗ nào trên prototype (ảnh đánh số). Không chạy agent.
-
-
-```markdown
 # Bài nộp LAB5 — [T1 - Healthcare] · Nhóm [nhom3nguoi]
 [Danh sách thành viên và việc mỗi người làm — copy bảng từ README]
 
@@ -176,12 +172,11 @@ Nhóm chốt : Cần người duyệt.
 
 **Thử mức trên 3 kịch bản (2 kịch bản đắt nhất và 1 kịch bản thường):**
 
-
 | Kịch bản | Sai có bị chặn? | Còn tự làm việc lẽ ra phải hỏi? | Khách bình thường có phải chờ vô ích? |
 |---|---|---|---|
-| Kịch bản 1 - hỏi còn nước muối | **Có:** không bịa tồn kho, không bịa sai địa chỉ cửa hàng. | Không tự lưu hồ sơ hoặc gửi gợi ý thuốc. | Không cần chờ dược sĩ chỉ để nghe “chưa có dữ liệu tồn kho”, khách được hướng dẫn kiểm tra cửa hàng. |
-| Kịch bản 3 - người cao tuổi tức ngực, khó thở| **Có:** Chặn việc gọi ‘goi_y_san_pham’ và ‘ban_thuoc_ke_don’ khi phát hiện dấu hiệu cấp cứu. | AI tự gọi khuyen_di_kham để cảnh báo, hướng dẫn gọi cấp cứu 115; ngắt luồng tư vấn thuốc, không cần chờ người dùng xác nhận. | Không cần chờ dược sĩ. Đây là tình huống khẩn cấp nên cảnh báo phải hiển thị ngay, không chờ dược sĩ duyệt. |
-| Kịch bản 5 - Thai phụ hỏi thuốc sổ mũi | **Có:** Chặn hành vi hứa bừa an toàn tuyệt đối của LLM đối với đối tượng nhạy cảm. | AI không tự ý gọi tool ‘goi_y_san_pham’ sinh ra các thuốc chống chỉ định cho thai kỳ 3 tháng đầu.  | Ca chat được đẩy thẳng lên hàng đợi ưu tiên kèm cờ [Thai phụ] để Dược sĩ thật tiếp nhận ngay, đồng thời thông báo rõ lý do vì sao AI không tự trả lời. |
+| **Kịch bản 3 – Người cao tuổi tức ngực, khó thở** | **Có.** Chặn việc gọi `goi_y_san_pham` và `ban_thuoc_ke_don` khi phát hiện dấu hiệu cấp cứu. | **Không.** AI tự gọi `khuyen_di_kham` để cảnh báo, hướng dẫn gọi cấp cứu 115 và ngắt luồng tư vấn thuốc; không cần chờ người dùng xác nhận. | **Không.** Cảnh báo phải hiển thị ngay, không chờ dược sĩ duyệt vì đây là tình huống khẩn cấp. |
+| **Kịch bản 5 – Thai phụ hỏi thuốc sổ mũi** | **Có.** Chặn việc tự động gọi `goi_y_san_pham` và đưa ra cam kết thuốc “an toàn tuyệt đối” khi người dùng đang mang thai. | **Không.** AI không tự chọn thuốc; gọi `chuyen_duoc_si` để chuyển cuộc chat cho dược sĩ. | **Không.** Chỉ trường hợp có yếu tố rủi ro mới cần chờ dược sĩ; ca chat được ưu tiên tiếp nhận. |
+| **Kịch bản 7 – Hỏi khuyến mãi khẩu trang** | **Có, đối với thông tin chưa được xác minh.** AI không được tự khẳng định chương trình khuyến mãi vẫn còn nếu không có dữ liệu xác nhận. | **Không.** Đây là yêu cầu thông thường; AI có thể phản hồi trong phạm vi thông tin có căn cứ, không cần chuyển dược sĩ. | **Không.** Khách hàng nhận hỗ trợ ngay, không phải chờ dược sĩ duyệt một yêu cầu thông thường. |
 
 
 **Lời hứa thay đổi theo quyền:** nói **“AI giúp nhận diện trường hợp cần hỏi thêm, cảnh báo và chuyển thông tin sang dược sĩ khi cần, gợi ý sản phẩm chỉ được phép gửi sau khi qua các bước kiểm tra phù hợp.”**
@@ -214,7 +209,3 @@ Nhóm chốt : Cần người duyệt.
 
 ## §7. Demo
 - Ca lạ nhận được ở demo: prototype đã làm gì, và nhóm có đổi ý gì sau ca đó không.
-```
-
-
-
